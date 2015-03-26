@@ -1,0 +1,4 @@
+SOURCE_DIR=dist
+DEST_DIR=pr2
+URL_PATH=/nightmares/nightmares.html
+HTTP_PORT=8000
