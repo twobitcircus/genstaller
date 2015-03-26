@@ -40,3 +40,7 @@ node app.js
 ## TODO
 
 - Better windows support.  I primarily test on OSX.
+
+## NOTES
+
+- Intel, would you PLEASE include rsync in your distribution images?
