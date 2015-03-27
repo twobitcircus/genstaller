@@ -2,7 +2,7 @@
 
 cd `dirname $0`
 
-source genstaller_config
+source ../genstaller_config
 
 if [ -z $1 ]
 then
@@ -14,18 +14,18 @@ fi
 echo "IP is $IP"
 
 echo "copying to the device"
-rsync -avrz --files-from=genstaller_syncfiles $SOURCE_DIR/ root@$IP:$DEST_DIR
+rsync -e "ssh -o StrictHostKeyChecking-no" -avrz --files-from=genstaller_syncfiles $SOURCE_DIR/ root@$IP:$DEST_DIR
 if [ $? -ne 0 ]
 then
   echo "rsync not found, installing it"
-  scp dependencies/rsync root@$IP:/usr/bin
+  scp -o StrictHostKeyChecking=no dependencies/rsync root@$IP:/usr/bin
   if [ $? -ne 0 ]
   then
     echo "installing rsync failed, exiting"
     exit 1;
   else
     echo "copying files to the device"
-    rsync -avrz --files-from=genstaller_syncfiles $SOURCE_DIR/ root@$IP:$DEST_DIR
+    rsync -e "ssh -o StrictHostKeyChecking=no" -avrz --files-from=../genstaller_syncfiles $SOURCE_DIR/ root@$IP:$DEST_DIR
     if [ $? -ne 0 ]
     then
       echo "rsync failed again, exiting"
@@ -34,7 +34,7 @@ then
 fi
 
 echo "launching on the device"
-ssh -f root@$IP "sh -c \"( (nohup $DEST_DIR/run.sh 2>&1 >app.out </dev/null) & )\""
+ssh -o StrictHostKeyChecking=no -f root@$IP "sh -c \"( (nohup $DEST_DIR/run.sh 2>&1 >app.out </dev/null) & )\""
 while :
 do
   sleep 2
