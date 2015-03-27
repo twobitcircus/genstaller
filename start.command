@@ -14,7 +14,7 @@ fi
 echo "IP is $IP"
 
 echo "copying to the device"
-rsync -e "ssh -o StrictHostKeyChecking-no" -avrz --files-from=genstaller_syncfiles $SOURCE_DIR/ root@$IP:$DEST_DIR
+rsync -e "ssh -o StrictHostKeyChecking-no" -avrz --files-from=../genstaller_syncfiles $SOURCE_DIR/ root@$IP:$DEST_DIR
 if [ $? -ne 0 ]
 then
   echo "rsync not found, installing it"
