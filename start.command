@@ -18,7 +18,14 @@ rsync -e "ssh -o StrictHostKeyChecking=no" -avrz --files-from=../genstaller_sync
 if [ $? -ne 0 ]
 then
   echo "rsync not found, installing it"
-  scp -o StrictHostKeyChecking=no dependencies/rsync root@$IP:/usr/bin
+  if [ $DEVICE == "galileo" ]
+  then
+    scp dependencies/galileo/rsync root@$IP:/usr/bin/rsync
+  else
+    scp -r dependencies/edison root@$IP:/tmp/edison
+    ssh root@$IP "opkg install /tmp/edison/libpopt0_1.16-r3_i586.ipk /tmp/edison/uclibc_0.9.33+git0+946799cd0ce0c6c803c9cb173a84f4d607bde350-r8.4_i586.ipk /tmp/edison/rsync_3.0.9-r0_i586.ipk" --force-overwrite
+  fi
+
   if [ $? -ne 0 ]
   then
     echo "installing rsync failed, exiting"
